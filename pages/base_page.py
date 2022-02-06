@@ -1,17 +1,20 @@
+import math
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from .locators import BasePageLocators
-import math
-
 
 class BasePage():
-    def __init__(self, browser, url, timeout=10):
+    def __init__(self, browser, url, timeout=4):
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
+
+    def find_text(self, find_By, selector):
+        element_text = self.browser.find_element(find_By, selector).text
+        return element_text
 
     def open(self):
         self.browser.get(self.url)
@@ -38,6 +41,9 @@ class BasePage():
             return False
         return True
 
+    def input_the_text(self, find_By, selector, text):
+        self.browser.find_element(find_By, selector).send_keys(text)
+
     def solve_quiz_and_get_code(self):
         alert = self.browser.switch_to.alert
         x = alert.text.split(" ")[2]
@@ -52,10 +58,17 @@ class BasePage():
         except NoAlertPresentException:
             print("No second alert presented")
 
-    def go_to_login_page(self):
-        link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
-        link.click()
-
     def should_be_login_link(self):
         assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
 
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
+                                                                     " probably unauthorised user"
+
+    def go_to_login_page(self):
+        login_link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
+        login_link.click()
+
+    def go_to_basket_page(self):
+        basket_button = self.browser.find_element(*BasePageLocators.BASKET_BUTTON)
+        basket_button.click()
