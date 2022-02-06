@@ -15,7 +15,7 @@ class ProductPage(BasePage):
     def should_be_product_name_in_msg(self):
         product_name = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text
         product_name_in_msg = self.browser.find_element(*ProductPageLocators.MESSAGE_PRODUCT_NAME).text
-        assert product_name in product_name_in_msg, "Product name not found in message"
+        assert product_name == product_name_in_msg, "Product name not found in message"
 
     def compare_product_price_and_basket_price(self):
         product_price = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
