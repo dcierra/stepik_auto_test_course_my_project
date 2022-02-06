@@ -1,0 +1,1 @@
+# stepik_auto_test_course_my_project
